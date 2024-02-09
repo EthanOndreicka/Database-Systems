@@ -56,10 +56,10 @@ WHERE NOT EXISTS ( SELECT *
 SELECT DISTINCT custID
 FROM Orders
 WHERE prodID IN ( SELECT prodID
-				  FROM Orders
-				  WHERE prodID = 'p01'
-			   	  OR prodID = 'p03')
-			   	  ORDER BY custID ASC;
+		  FROM Orders
+		  WHERE prodID = 'p01'
+		  OR prodID = 'p03')
+ORDER BY custID ASC;
 
 -- 6  --
 SELECT DISTINCT custId
