@@ -61,15 +61,17 @@ WHERE prodID IN ( SELECT prodID
 			   	  OR prodID = 'p03')
 			   	  ORDER BY custID ASC;
 
--- 6  | DOESN'T WORK --
-SELECT DISTINCT custID
+-- 6  --
+SELECT DISTINCT custId
 FROM Orders
-WHERE prodID IN (SELECT prodID
-                 FROM Orders
-                 WHERE prodID = 'p01')
-  				 AND prodID IN (SELECT prodID
-                 				FROM Orders
-                 				WHERE prodID = 'p03');
+WHERE custId IN ( SELECT custId
+    			  FROM Orders
+    			  WHERE prodId = 'p01')
+				  AND custId IN ( SELECT custId
+    							  FROM Orders
+    							  WHERE prodId = 'p03')
+ORDER BY custId DESC;
+
 
 -- 7 --
 SELECT firstName, lastName
@@ -99,3 +101,13 @@ WHERE agentId IN ( SELECT agentId
 								 WHERE homeCity = 'Montreal'))
 ORDER BY prodId DESC;
 
+-- 10 --
+SELECT lastName, homeCity
+FROM People
+WHERE pid IN ( SELECT custId
+               FROM Orders
+               WHERE agentId IN ( SELECT pid
+                                  FROM People
+                                  WHERE homeCity = 'Chilliwack'
+                                  OR homeCity = 'Oslo'))
+ORDER BY lastName ASC;
