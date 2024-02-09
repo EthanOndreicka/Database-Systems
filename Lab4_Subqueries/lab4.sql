@@ -55,8 +55,47 @@ WHERE NOT EXISTS ( SELECT *
 -- 5 --
 SELECT DISTINCT custID
 FROM Orders
-WHERE prodID = 'p03' 
-OR prodID = 'p05'
-ORDER BY custId ASC;
+WHERE prodID IN ( SELECT prodID
+				  FROM Orders
+				  WHERE prodID = 'p01'
+			   	  OR prodID = 'p03')
+			   	  ORDER BY custID ASC;
 
--- 6 --
+-- 6  | DOESN'T WORK --
+SELECT DISTINCT custID
+FROM Orders
+WHERE prodID IN (SELECT prodID
+                 FROM Orders
+                 WHERE prodID = 'p01')
+  				 AND prodID IN (SELECT prodID
+                 				FROM Orders
+                 				WHERE prodID = 'p03');
+
+-- 7 --
+SELECT firstName, lastName
+FROM People
+WHERE pid IN ( SELECT pid
+               FROM Agents
+               WHERE pid IN ( SELECT agentID
+                              FROM Orders
+                              WHERE prodID IN ('p05', 'p07')))
+ORDER BY lastName ASC;
+
+-- 8 --
+SELECT homeCity, DOB
+FROM People
+WHERE pid IN ( SELECT agentId
+    		   FROM Orders
+    		   WHERE custId = '008')
+ORDER BY homeCity DESC;
+
+-- 9 --
+SELECT DISTINCT prodId
+FROM Orders
+WHERE agentId IN ( SELECT agentId
+				   FROM Orders
+				   WHERE custId IN (SELECT pid
+								 FROM People
+								 WHERE homeCity = 'Montreal'))
+ORDER BY prodId DESC;
+
