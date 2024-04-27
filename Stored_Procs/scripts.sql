@@ -1,3 +1,4 @@
+-- 1
 CREATE OR REPLACE FUNCTION PreReqsFor(courseNum INTEGER, OUT preReqList INTEGER[]) AS 
 $$
 BEGIN
@@ -6,7 +7,7 @@ END;
 $$ 
 LANGUAGE plpgsql;
 
-
+-- 2
 CREATE OR REPLACE FUNCTION IsPreReqFor(courseNum INTEGER, OUT courseList INTEGER[]) AS 
 $$
 BEGIN
@@ -15,7 +16,7 @@ END;
 $$ 
 LANGUAGE plpgsql;
 
-
+-- Optional Challenge
 CREATE OR REPLACE FUNCTION GetAllPrerequisites(courseNum INTEGER, OUT preReqList INTEGER[]) AS
 $$
 DECLARE
