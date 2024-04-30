@@ -155,3 +155,30 @@ CREATE TABLE PlayerStats (
     pitchingLosses       int,
   primary key(PeopleID)
 );
+
+-- Plays For --
+CREATE TABLE PlaysFor (
+    PeopleID        int not null references People(PeopleID),
+    TeamID          int not null references Team(TeamID),
+    start_date      date not null,
+    end_date        date
+  primary key(PeopleID, TeamID)
+);
+
+-- Coaches For --
+CREATE TABLE CoachesFor (
+    PeopleID        int not null references People(PeopleID),
+    TeamID          int not null references Team(TeamID),
+    start_date      date not null,
+    end_date        date,
+  primary key(PeopleID, TeamID)
+);
+
+-- Broadcasts For --
+CREATE TABLE BroadcastsFor (
+    PeopleID        int not null references People(PeopleID),
+    NetworkID       int not null references BroadcastNetworks(NetworkID),
+    start_date      date not null,
+    end_date        date,
+  primary key(PeopleID, NetworkID)
+);
