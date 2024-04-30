@@ -21,6 +21,8 @@ DROP TABLE IF EXISTS PlaysFor;
 DROP TABLE IF EXISTS CoachesFor;
 DROP TABLE IF EXISTS BroadcastsFor;
 
+-- Table Creation Statements
+
 -- People --
 CREATE TABLE People (
    PeopleID         int not null,
@@ -81,6 +83,7 @@ CREATE TABLE Team (
     TeamID                 int not null
     PeopleID               int not null references People(PeopleID),
     StadiumID              int not null references Stadiums(StadiumID),
+    teamName               text not null,
     primaryColor           text not null,
     secondaryColor         text not null,
     mascotName             text,
@@ -186,3 +189,23 @@ CREATE TABLE BroadcastsFor (
     end_date        date,
   primary key(PeopleID, NetworkID)
 );
+
+-- Loading Example Data 
+
+INSERT INTO People (PeopleID, fName, lName, birthday, debutDate, AwardsID)
+VALUES             (1, 'John', 'Lobster', '1995-07-22', '2018-04-12', NULL),
+                   (2, 'Richard', 'Octo', '1992-01-12', '2012-08-18', 1),
+                   (3, 'Jim', 'Krill', '2000-12-25', '2022-09-01', 2),
+                   (4, 'Drew', 'Shark', '1997-06-20', '2016-08-30', NULL),
+                   (5, 'Alan', 'Labouseur', '1985-02-14', '2006-03-30', 3),
+                   (6, 'Paul', 'Boats', '1981-03-17', '2002-06-22', NULL),
+                   (7, 'Michael', 'Coral', '1989-10-10', '2002-04-12', 4),
+                   (8, 'Josh', 'Fish', '2003-02-17', '2024-3-29', NULL),
+                   (9, 'Randy', 'Flounder', '1995-07-26', '2017-10-01', 5),
+                   (10, 'Carlos', 'Hook', '1988-01-19', '2012-06-05', NULL),
+                   (11, 'Tim', 'Sea', '2001-03-13', '2023-7-12', NULL),
+                   (12, 'Frank', 'Kelp', '1973-11-24', '1998-05-23', NULL),
+                   (13, 'Kyle', 'Dolphin', '1983-12-02', '2006-08-17', 6),
+                   (14, 'Dominick', 'Osyter', '1968-05-01', '1993-02-12', 7),
+                   (15, 'Kevin', 'Shell', '1990-08-12', '2012-06-18', NULL);
+
