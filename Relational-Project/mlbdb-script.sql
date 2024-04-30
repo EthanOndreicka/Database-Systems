@@ -21,6 +21,12 @@ DROP TABLE IF EXISTS PlaysFor;
 DROP TABLE IF EXISTS CoachesFor;
 DROP TABLE IF EXISTS BroadcastsFor;
 
+-- Type Creation Statements
+
+CREATE TYPE division AS ENUM ('NL East', 'NL Central', 'NL West', 'AL East', 'AL Central', 'AL West');
+
+CREATE TYPE orientation AS ENUM ('lefty', 'righty', 'ambidextrous');
+
 -- Table Creation Statements
 
 -- People --
@@ -40,12 +46,10 @@ CREATE TABLE Players (
     PeopleID               int not null references People(PeopleID),
     height_cm              decimal(8,3) not null,
     weight_kg              decimal(7,3) not null, 
-    TeamID                 int references Teams(TeamID),
     position               text not null,
     hittingOrientation     orientation not null,
     throwingArm            orientation not null,
   primary key(PeopleID)
-  foreign key(TeamID)
 );
 
 -- Coaches --
@@ -65,23 +69,22 @@ CREATE TABLE Umpires (
 -- Broadcasters --
 CREATE TABLE Broadcasters (
     PeopleID        int not null references People(PeopleID),
-    NetworkID       int not null references BroadcastNetworks(NetworkID),
+    gamesBroadcasted int,
   primary key(PeopleID)
-  foreign key(NetworkID)
 );
 
 -- Free Agents --
 CREATE TABLE FreeAgents (
     PeopleID        int not null references People(PeopleID),
     desiredSalary   int,
-    lastTeam        text,
+    lastTeamID      int not null references Team(TeamID)
   primary key(PeopleID)
+  foreign key(TeamID)
 );
 
 -- Team --
 CREATE TABLE Team (
     TeamID                 int not null
-    PeopleID               int not null references People(PeopleID),
     StadiumID              int not null references Stadiums(StadiumID),
     teamName               text not null,
     primaryColor           text not null,
@@ -91,8 +94,7 @@ CREATE TABLE Team (
     doubleA_Affiliate      text not null,
     singleA_Affiliate      text not null,
     highA_Affiliate        text not null,
-  primary key(TeamID, PeopleID)
-  foreign key(StadiumID)
+  primary key(TeamID, StadiumID)
 );
 
 -- Stadiums --
@@ -128,7 +130,6 @@ CREATE TABLE BroadcastNetworks(
 CREATE TABLE Awards(
     AwardID         int not null,
     Award_Name      text not null,
-    Award_Winner    text not null,
   primary key(AwardID)
 );
 
@@ -190,6 +191,12 @@ CREATE TABLE BroadcastsFor (
   primary key(PeopleID, NetworkID)
 );
 
+-- Award Won --
+CREATE TABLE awardWon (
+    PeopleID int not null references People(PeopleID),
+    AwardsID int not null references Awards(AwardsID);
+)
+
 -- Loading Example Data 
 
 INSERT INTO People (PeopleID, fName, lName, birthday, debutDate, AwardsID)
@@ -209,3 +216,61 @@ VALUES             (1, 'John', 'Lobster', '1995-07-22', '2018-04-12', NULL),
                    (14, 'Dominick', 'Osyter', '1968-05-01', '1993-02-12', 7),
                    (15, 'Kevin', 'Shell', '1990-08-12', '2012-06-18', NULL);
 
+INSERT INTO Players (PeopleID, height_cm, weight_kg, position, hittingOrientation, throwingArm)
+VALUES             (1, 190.500, 80.000, 'Second Base', 'lefty', 'righty'),
+                   (2, 165.100, 65.317, 'Center Field', 'righty', 'righty'),
+                   (4, 183.439, 95.467, 'Shortstop', 'righty', 'ambidextrous'),
+                   (5, 808.808, 808.808, 'Pitcher', 'righty', 'righty'),
+                   (8, 199.691, 101.803, 'Pitcher', 'lefty', 'lefty'),
+                   (9, 120.700, 72.991, 'Right Field', 'righty', 'lefty'),
+                   (11, 166.388, 59.140, 'Catcher', 'righty', 'righty');
+
+
+INSERT INTO Coaches (PeopleID, gamesCoached)
+VALUES             (6, 1378),
+                   (10, 322),
+                   (14, 2001);
+
+INSERT INTO Broadcasters (PeopleID, gamesBroadcasted)
+VALUES             (3, 183),
+                   (12, 2001),
+                   (13, 971),
+
+INSERT INTO Umpires (PeopleID, gamesUmpired)
+VALUES             (7, 287),
+                   (15, 677);
+
+INSERT INTO FreeAgents (PeopleID, desiredSalary, lastTeamID)
+VALUES             (8, 2500000, 3),
+                   (1, 1375000, 5);
+
+INSERT INTO Stadiums (StadiumID, location, seatingCapacity, stadiumName)
+VALUES             (1, 'New York', 53000, 'Liberty Park'),
+                   (2, 'Colorado', 49000, 'Mountain Field'),
+                   (3, 'Florida', 55000, 'Blue Ocean Stadium'),
+                   (4, 'Wyoming', 38000, 'The Buffalo Dome');
+
+INSERT INTO Team (TeamID, StadiumID, teamName, primaryColor, secondaryColor, mascotName, tripleA_Affiliate, doubleA_Affiliate, singleA_Affiliate, highA_Affiliate)
+VALUES             (1, 1, 'Liberty', 'Green', 'White', 'Lady Liberty', 'Vermont Trees', 'Alaksa Yetis', 'Buffalo Rivers', 'Miami Sunsets'),
+                   (2, 3, 'Retirees', 'Light Blue', 'Navy Blue', 'Grandpa Joe', 'Texas Chainsaws', 'Arizona Nothingness', 'Utah Mormons', 'Maine Mutants'),
+                   (3, 2, 'Climbers', 'Olive Green', 'Brown', 'Rocky the Rock', 'Seattle Sqaures', 'Denver Dawgs', 'Kansas Nados',  'North Carolina Borings'),
+                   (4, 4, 'Water Buffalos', 'Yellow', 'Black', 'Buddy the Buffalo', 'Minnesota Hogs', 'Georgia Peaches', 'Iowa Goats', 'Oregon Petals');
+
+INSERT INTO BroadcastNetworks (NetworkID, channelNumber, networkName)
+VALUES             (1, 225, 'Sports Central'),
+                   (2, 585, 'Bingus Sportus'),
+                   (3, 75, 'Big Baseball Broadcasts');
+
+INSERT INTO HallOfFame (HallID, dateInducted, PeopleID)
+VALUES             (1, '2016-04-20', 5),
+                   (2, '2000-08-17', 14),
+                   (3, '2008-08-19', 12);
+
+INSERT INTO Awards (AwardID, Award_Name)
+VALUES             (1, 'Silver Slugger'),
+                   (2, 'Cy Young'),
+                   (3, 'MVP'),
+                   (4, 'Coach of the Year'),
+                   (5, 'Broadcaster of the Year');
+
+INSERT INTO 
