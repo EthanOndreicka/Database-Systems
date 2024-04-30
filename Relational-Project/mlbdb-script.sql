@@ -17,6 +17,9 @@ DROP TABLE IF EXISTS BroadcastNetworks;
 DROP TABLE IF EXISTS Awards;
 DROP TABLE IF EXISTS HallOfFame;
 DROP TABLE IF EXISTS PlayerStats;
+DROP TABLE IF EXISTS PlaysFor;
+DROP TABLE IF EXISTS CoachesFor;
+DROP TABLE IF EXISTS BroadcastsFor;
 
 -- People --
 CREATE TABLE People (
@@ -140,17 +143,18 @@ CREATE TABLE PlayerStats (
     atBats          int,
     hits            int,
     strikeouts      int,
-    battingAverage  int, -- Calculate 
+    battingAverage  decimal(5,3) as (CASE WHEN atBats > 0 THEN CAST (hits as decimal(5,0)) / atBats ELSE NULL END), -- Calculate 
     singles         int,
     doubles         int,
     triples         int,
     homeruns        int,
     walks           int,
-    onBasePercentage int, -- Calculate 
+    onBasePercentage decimal (5,3) as (CASE WHEN atBats > 0 THEN (CAST(hits AS decimal(5,0))+ walks) / atBats ELSE NULL END), 
     pitchingStrikeouts   int,
     inningsPitched       int,
-    strikeoutsPerNine    int, -- Calculate
-    earnedRunAverage     int, -- Calculate
+    strikeoutsPerNine    decimal(5,2) as (CASE WHEN inningsPitched > 0 THEN (CAST(pitchingStrikeouts AS decimal(5,0)) / inningsPitched) * 9),
+    earnedRuns           int,
+    earnedRunAverage     decimal(5,2) as (CASE WHEN inningsPitched > 0 THEN (CAST(earnedRuns AS decimal(5,0)) / inningsPitched) * 9 ELSE NULL END),
     pitchingWins         int,
     pitchingLosses       int,
   primary key(PeopleID)
