@@ -115,6 +115,7 @@ CREATE TABLE Team (
     doubleA_Affiliate      text not null,
     singleA_Affiliate      text not null,
     highA_Affiliate        text not null,
+	division			   division not null,
   primary key(TeamID)
 );
 
@@ -266,11 +267,11 @@ VALUES             (1, 'New York', 53000, 'Liberty Park'),
                    (3, 'Florida', 55000, 'Blue Ocean Stadium'),
                    (4, 'Wyoming', 38000, 'The Buffalo Dome');
 
-INSERT INTO Team (TeamID, StadiumID, teamName, primaryColor, secondaryColor, mascotName, tripleA_Affiliate, doubleA_Affiliate, singleA_Affiliate, highA_Affiliate)
-VALUES             (1, 1, 'Liberty', 'Green', 'White', 'Lady Liberty', 'Vermont Trees', 'Alaska Yetis', 'Buffalo Rivers', 'Miami Sunsets'),
-                   (2, 3, 'Retirees', 'Light Blue', 'Navy Blue', 'Grandpa Joe', 'Texas Chainsaws', 'Arizona Nothingness', 'Utah Mormons', 'Maine Mutants'),
-                   (3, 2, 'Climbers', 'Olive Green', 'Brown', 'Rocky the Rock', 'Seattle Squares', 'Denver Dawgs', 'Kansas Nados',  'North Carolina Borings'),
-                   (4, 4, 'Water Buffalos', 'Yellow', 'Black', 'Buddy the Buffalo', 'Minnesota Hogs', 'Georgia Peaches', 'Iowa Goats', 'Oregon Petals');
+INSERT INTO Team (TeamID, StadiumID, teamName, primaryColor, secondaryColor, mascotName, tripleA_Affiliate, doubleA_Affiliate, singleA_Affiliate, highA_Affiliate, division)
+VALUES             (1, 1, 'Liberty', 'Green', 'White', 'Lady Liberty', 'Vermont Trees', 'Alaska Yetis', 'Buffalo Rivers', 'Miami Sunsets', 'NL East'),
+                   (2, 3, 'Retirees', 'Light Blue', 'Navy Blue', 'Grandpa Joe', 'Texas Chainsaws', 'Arizona Nothingness', 'Utah Mormons', 'Maine Mutants', 'AL East'),
+                   (3, 2, 'Climbers', 'Olive Green', 'Brown', 'Rocky the Rock', 'Seattle Squares', 'Denver Dawgs', 'Kansas Nados',  'North Carolina Borings', 'NL West'),
+                   (4, 4, 'Water Buffalos', 'Yellow', 'Black', 'Buddy the Buffalo', 'Minnesota Hogs', 'Georgia Peaches', 'Iowa Goats', 'Oregon Petals', 'AL Central');
 
 
 INSERT INTO PlaysFor (PeopleID, TeamID, start_date, end_date)
