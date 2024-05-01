@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS Broadcasters;
 DROP TABLE IF EXISTS Game;
 DROP TABLE IF EXISTS BroadcastNetworks;
 DROP TABLE IF EXISTS Awards;
+DROP TABLE IF EXISTS AwardsWon;
 DROP TABLE IF EXISTS HallOfFame;
 DROP TABLE IF EXISTS PlayerStats;
 DROP TABLE IF EXISTS PlaysFor;
@@ -83,8 +84,9 @@ CREATE TABLE Coaches (
 -- Umpires --
 CREATE TABLE Umpires (
     PeopleID        int not null references People(PeopleID),
+    UmpireID        int not null,
     gamesUmpired    int,
-  primary key(PeopleID)
+  primary key(UmpireID)
 );
 
 -- Broadcasters --
@@ -142,6 +144,7 @@ CREATE TABLE Game (
     NetworkID           int not null references BroadcastNetworks(NetworkID),
     Team1ID             int not null references Team(TeamID),
     Team2ID             int not null references Team(TeamID),
+    UmpireID            int not null references Umpires(UmpireID),
   primary key(GameDate)
 );
 
@@ -258,8 +261,8 @@ VALUES             (3, 183),
                    (13, 971);
 
 INSERT INTO Umpires (PeopleID, gamesUmpired)
-VALUES             (7, 287),
-                   (15, 677);
+VALUES             (7, 287, 1),
+                   (15, 677, 2);
 
 INSERT INTO Stadiums (StadiumID, location, seatingCapacity, stadiumName)
 VALUES             (1, 'New York', 53000, 'Liberty Park'),
@@ -307,13 +310,13 @@ VALUES             (1, '2016-04-20', 5),
                    (2, '2000-08-17', 14),
                    (3, '2008-08-19', 12);
 
-INSERT INTO Game (GameDate, weather, NetworkID, Team1ID, Team2ID)
-VALUES             ('2024-05-12', 'sunny', 3, 1, 4),
-                   ('2024-05-13', 'rainy', 2, 2, 4),
-                   ('2024-05-14', 'snowy', 2, 1, 4),
-                   ('2024-05-15', 'sunny', 1, 3, 4),
-                   ('2024-05-17', 'cloudy', 3, 4, 1),
-                   ('2024-05-18', 'sunny', 1, 4, 3);
+INSERT INTO Game (GameDate, weather, NetworkID, Team1ID, Team2ID, UmpireID)
+VALUES             ('2024-05-12', 'sunny', 3, 1, 4, 1),
+                   ('2024-05-13', 'rainy', 2, 2, 4, 2),
+                   ('2024-05-14', 'snowy', 2, 1, 4, 1),
+                   ('2024-05-15', 'sunny', 1, 3, 4, 2),
+                   ('2024-05-17', 'cloudy', 3, 4, 1, 1),
+                   ('2024-05-18', 'sunny', 1, 4, 3, 2);
 
 INSERT INTO PlayerStats (PeopleID, atBats, hits, strikeouts, singles, doubles, triples, homeruns, walks, pitchingStrikeouts, inningsPitched, earnedRuns, pitchingWins, pitchingLosses)
 VALUES             (1, 891, 212, 189, 184, 20, 3, 5, 102, NULL, NULL, NULL, NULL, NULL),
